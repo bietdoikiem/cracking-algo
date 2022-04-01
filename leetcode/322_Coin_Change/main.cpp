@@ -17,6 +17,13 @@ ostream& operator<<(ostream& os, vector<T> const& x) {
   return os << "}";
 }
 
+template <class T, size_t SIZE>
+void printArr(T const (&x)[SIZE]) {
+  cout << "{ ";
+  for (auto& y : x) cout << y << " ";
+  cout << "}" << endl;
+}
+
 int dp[10001];
 
 int min(int x, int y) { return x < y ? x : y; }
@@ -56,12 +63,37 @@ int coinChange(vector<int>& coins, int amount) {
   return ans;
 }
 
+int coinChangeBU(vector<int>& coins, int amount) {
+  if (amount == 0) {
+    return 0;
+  }
+  fill_n(dp, size(dp), INT_MAX);
+  for (auto& c : coins) {
+    if (c <= 10001) {
+      dp[c] = 1;
+    }
+  }
+  for (int a = 1; a < amount + 1; a++) {
+    for (auto& c : coins) {
+      if (a - c > 0) {
+        if (dp[a - c] != INT_MAX) {
+          dp[a] = min(dp[a], 1 + dp[a - c]);
+        }
+      }
+    }
+  }
+  if (dp[amount] != INT_MAX) {
+    return dp[amount];
+  }
+  return -1;
+}
+
 int main() {
   vector<int> coins = {1, 2, 5};
   int amount = 11;
-  cout << "answer: " << coinChange(coins, amount) << endl;
+  cout << "answer: " << coinChangeBU(coins, amount) << endl;
   coins = {2};
   amount = 3;
-  cout << "answer: " << coinChange(coins, amount) << endl;
+  cout << "answer: " << coinChangeBU(coins, amount) << endl;
   return 0;
 }
