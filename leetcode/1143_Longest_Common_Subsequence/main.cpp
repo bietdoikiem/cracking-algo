@@ -24,20 +24,29 @@ void printArr(T const (&x)[SIZE]) {
   cout << "}" << endl;
 }
 
+int dp[1000][1000];
+
 int max(int x, int y) { return x > y ? x : y; }
 
-int helper(string text1, string text2, size_t i, size_t j) {
+int helper(string text1, string text2, size_t n, size_t m, size_t i, size_t j) {
   if (i >= text1.size() || j >= text2.size()) {
     return 0;
   }
-  if (text1[i] == text2[j]) {
-    return 1 + helper(text1, text2, i + 1, j + 1);
+  if (dp[i][j] != -1) {
+    return dp[i][j];
   }
-  return max(helper(text1, text2, i + 1, j), helper(text1, text2, i, j + 1));
+  if (text1[i] == text2[j]) {
+    dp[i][j] = 1 + helper(text1, text2, m, n, i + 1, j + 1);
+    return dp[i][j];
+  }
+  dp[i][j] = max(helper(text1, text2, m, n, i + 1, j),
+                 helper(text1, text2, m, n, i, j + 1));
+  return dp[i][j];
 }
 
 int longestCommonSubsequence(string text1, string text2) {
-  int ans = helper(text1, text2, 0, 0);
+  memset(dp, -1, sizeof(dp));  // Set all to -1
+  int ans = helper(text1, text2, text1.size(), text2.size(), 0, 0);
   return ans;
 }
 
