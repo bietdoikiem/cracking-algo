@@ -44,7 +44,7 @@ int helper(string text1, string text2, size_t n, size_t m, size_t i, size_t j) {
   return dp[i][j];
 }
 
-int longestCommonSubsequence(string text1, string text2) {
+int longestCommonSubsequenceMemoization(string text1, string text2) {
   memset(dp, -1, sizeof(dp));  // Set all to -1
   int ans = helper(text1, text2, text1.size(), text2.size(), 0, 0);
   return ans;
@@ -55,14 +55,14 @@ int main() {
   string text1 = "abcde";
   string text2 = "ace";
   cout << "LCS of text1 and text1 is: "
-       << longestCommonSubsequence(text1, text2) << endl;
+       << longestCommonSubsequenceMemoization(text1, text2) << endl;
   text1 = "abc";
   text2 = "abc";
   cout << "LCS of text1 and text1 is: "
-       << longestCommonSubsequence(text1, text2) << endl;
+       << longestCommonSubsequenceMemoization(text1, text2) << endl;
   text1 = "abc";
   text2 = "def";
   cout << "LCS of text1 and text1 is: "
-       << longestCommonSubsequence(text1, text2) << endl;
+       << longestCommonSubsequenceMemoization(text1, text2) << endl;
   return 0;
 }
