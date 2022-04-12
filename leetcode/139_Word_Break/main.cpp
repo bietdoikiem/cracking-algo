@@ -34,6 +34,7 @@ auto& log(const Args&... args) {
   log(__VA_ARGS__) << '\n'
 
 int dp[1000];
+bool dp2[1001];
 
 bool helper(string& s, size_t n, size_t l, unordered_map<string, int>& m) {
   if (l >= n) {
@@ -68,6 +69,31 @@ bool wordBreak(string s, vector<string>& wordDict) {
   return helper(s, s.size(), 0, wordMap);
 }
 
+bool checkKey(unordered_map<string, bool>& m, string key) {
+  if (m.find(key) != m.end()) {
+    return true;
+  }
+  return false;
+}
+
+bool wordBreakDP(string s, vector<string>& wordDict) {
+  int n = (int)s.size();
+  unordered_map<string, bool> m;
+  for (int i = 0; i < (int)wordDict.size(); i++) {
+    m[wordDict[i]] = true;
+  }
+  dp2[0] = true;
+  for (int i = 1; i <= n; i++) {
+    for (int j = 0; j < n; j++) {
+      if (dp2[j] && checkKey(m, s.substr(j, i - j))) {
+        dp2[i] = true;
+        break;
+      }
+    }
+  }
+  return dp2[n];
+}
+
 int main() {
   cout << boolalpha;
   string s1 =
@@ -77,6 +103,9 @@ int main() {
   vector<string> dict1 = {"a",         "aa",        "aaa",     "aaaa",
                           "aaaaa",     "aaaaaa",    "aaaaaaa", "aaaaaaaa",
                           "aaaaaaaaa", "aaaaaaaaaa"};
-  cout << "Result of s1: " << wordBreak(s1, dict1) << endl;
+  cout << "Result of s1: " << wordBreakDP(s1, dict1) << endl;
+  string s2 = "leetcode";
+  vector<string> dict2 = {"leet", "code"};
+  cout << "Result of s2: " << wordBreakDP(s2, dict2) << endl;
   return 0;
 }
