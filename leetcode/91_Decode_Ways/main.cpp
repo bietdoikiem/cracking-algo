@@ -39,19 +39,31 @@ int numDecodings(string s) {
   int n = (int)s.size();
   dp[0] = 1;
   dp[1] = s.substr(0, 1) != "0" ? 1 : 0;
-  int td;  // Store int of two-digit result
   for (int i = 2; i < n + 1; i++) {
-    if (stoi(s.substr(i - 1, 1)) != 0) {
-      dp[i] += dp[i - 1];
-    }
+    if (stoi(s.substr(i - 1, 1)) != 0) dp[i] += dp[i - 1];
     if (s.substr(i - 2, 1) != "0") {
-      td = stoi(s.substr(i - 2, 2));
-      if (td > 0 && td < 27) {
+      if (int td = stoi(s.substr(i - 2, 2)); td > 0 && td < 27)
         dp[i] += dp[i - 2];
-      }
     }
   }
   return dp[n];
+}
+
+int numDecodingsSpaceOptimized(string s) {
+  int n = (int)s.size();
+  int td = 1;
+  int od = s.substr(0, 1) != "0" ? 1 : 0;
+  int ans = od;
+  for (int i = 2; i < n + 1; i++) {
+    ans = 0;
+    if (stoi(s.substr(i - 1, 1)) != 0) ans += od;
+    if (s.substr(i - 2, 1) != "0") {
+      if (int d = stoi(s.substr(i - 2, 2)); d > 0 && d < 27) ans += td;
+    }
+    td = od;
+    od = ans;
+  }
+  return ans;
 }
 
 int main() {
