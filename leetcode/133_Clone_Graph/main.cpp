@@ -51,29 +51,24 @@ class Node {
   }
 };
 
-void dfs(unordered_map<Node*, Node*>& V, Node* n, Node* on) {
-  vector<Node*> adj;
-  V[on] = n;
+void dfs(unordered_map<Node*, Node*>& V, Node* nn, Node* on) {
+  vector<Node*> nb;
+  V[on] = nn;
   for (auto u : on->neighbors) {
     if (V.find(u) == V.end()) {
-      Node* nn = new Node(u->val);
-      dfs(V, nn, u);
+      dfs(V, new Node(u->val), u);
     }
-    adj.push_back(V[u]);
+    nb.push_back(V[u]);
   }
-  n->neighbors = adj;
-  return;
+  nn->neighbors = nb;
 }
 
 Node* cloneGraph(Node* node) {
-  // Check empty node
-  if (node == NULL) {
-    return node;
-  }
+  if (node == nullptr) return node;
   unordered_map<Node*, Node*> V;
-  Node* n = new Node(node->val);
-  dfs(V, n, node);
-  return n;
+  Node* nn = new Node(node->val);
+  dfs(V, nn, node);
+  return nn;
 }
 
 int main() { return 0; }
