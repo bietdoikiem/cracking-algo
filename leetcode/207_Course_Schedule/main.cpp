@@ -45,29 +45,95 @@ void displayGraph(vector<int> adj[], int V) {
   }
 }
 
-void dfs(vector<int> adj[], bool V[], int c, int o, bool* hasCycle) {
-  V[c] = true;
-  for (int e : adj[c]) {
-    if (e == o) {
-      *hasCycle = true;
-      return;
+bool dfs(vector<int> adj[], bool V[], int u, int o) {
+  V[u] = true;
+  for (int e : adj[u]) {
+    if (e == o) return false;
+    if (!V[e]) {
+      if (!dfs(adj, V, e, o)) return false;
     };
-    if (!V[e]) dfs(adj, V, e, o, hasCycle);
   }
-  return;
+  return true;
 }
 
+// NOTE: Inefficient way to exhaustively search in all vertices to detect cycle
 bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
   vector<int> adj[numCourses];
   bool V[numCourses];
   memset(V, 0, sizeof(V));
-  bool hasCycle = false;
   for (auto& c : prerequisites) addEdge(adj, c[1], c[0]);
 
   for (int i = 0; i < numCourses; i++) {
-    dfs(adj, V, i, i, &hasCycle);
+    if (!dfs(adj, V, i, i)) return false;
     memset(V, 0, sizeof(V));  // Reset visited node for each traversed vertex
-    if (hasCycle) return false;
+  }
+  return true;
+}
+
+void dfsTopo(vector<int> adj[], bool V[], stack<int>& s, int u) {
+  V[u] = true;
+  for (auto& e : adj[u]) {
+    if (!V[e]) dfsTopo(adj, V, s, e);
+  }
+  s.push(u);
+  return;
+}
+
+bool canFinishTopo(int numCourses, vector<vector<int>>& prerequisites) {
+  const int N = numCourses;
+  vector<int> adj[N];
+  // Build directed graph from prerequisites
+  for (auto& p : prerequisites) {
+    if (p[1] == p[0]) return false;  // Early detection of cycle
+    addEdge(adj, p[1], p[0]);
+  };
+  // Boolean array to keep track of visited vertices
+  bool V[N];
+  memset(V, false, sizeof(V));  // Initialize visited array with 'false'
+  // Stack to store DFS Topological sort order
+  stack<int> s;
+  for (int i = 0; i < N; i++) {
+    if (!V[i]) dfsTopo(adj, V, s, i);
+  }
+  // HashMap to store insert position of Topological sort
+  unordered_map<int, int> posMap;
+  int insIdx = 0;
+  while (!s.empty()) {
+    posMap[s.top()] = insIdx;
+    s.pop();
+    insIdx++;
+  }
+  // Iterate parent vertices and their children
+  for (int i = 0; i < N; i++) {
+    for (auto& e : adj[i]) {
+      if (posMap[i] > posMap[e]) return false;
+    }
+  }
+  return true;
+}
+
+bool dfsAcyclic(vector<int> adj[], char color[], int u) {
+  color[u] = 1;
+  for (auto& e : adj[u]) {
+    if (color[e] == 0) {
+      if (!dfsAcyclic(adj, color, e)) return false;
+    }
+    if (color[e] == 1) return false;
+  }
+  color[u] = 2;
+  return true;
+}
+
+bool canFinishAcyclic(int numCourses, vector<vector<int>>& prerequisites) {
+  const int N = numCourses;
+  vector<int> adj[N];
+  char color[N];
+  memset(color, 0, sizeof(color));
+  // Build directed graph
+  for (auto& p : prerequisites) addEdge(adj, p[1], p[0]);
+  // Traverse all vertices to detect cycle
+  for (int i = 0; i < N; i++) {
+    if (color[i] == 0 && !dfsAcyclic(adj, color, i)) return false;
   }
   return true;
 }
@@ -94,6 +160,6 @@ int main() {
   cout << "ans6: " << canFinish(n6, p6) << endl;
   int n7 = 3;
   vector<vector<int>> p7 = {{0, 1}, {0, 2}, {1, 2}, {2, 1}};  // false
-  cout << "ans6: " << canFinish(n7, p7) << endl;
+  cout << "ans7: " << canFinish(n7, p7) << endl;
   return 0;
 }
