@@ -45,25 +45,25 @@ int shipWithinDays(vector<int>& weights, int days) {
   int ans = 0;
   while (l <= r) {
     int m = l + (r - l) / 2;
-    int curSum = 0, curDays = 1;
+    int curCap = 0, curDays = 1;
     for (int i = 0; i < n; i++) {
-      int rPkgs = n - i;           // Remaining packages
-      int rDays = days - curDays;  // Remaining days
-      // Early stop if the remaining packages == remaining days
+      int rPkgs = n - i;
+      int rDays = days - curDays;
       if (rPkgs == rDays) {
         curDays += rDays;
         break;
       }
-      if (curSum + weights[i] > m) {
-        curSum = weights[i];  // Reset
+      if (curCap + weights[i] > m) {
+        curCap = weights[i];
+        curDays += 1;
       } else {
-        curSum += weights[i];
+        curCap += weights[i];
       }
     }
-    if (curDays <= days) {
+    if (curDays == days) {
       r = m - 1;
       ans = m;
-    } else {
+    } else if (curDays > days) {
       l = m + 1;
     }
   }
