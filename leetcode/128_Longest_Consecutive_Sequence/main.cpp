@@ -45,7 +45,7 @@ int longestConsecutive(vector<int>& nums) {
     if (s.find(e) == s.end()) continue;
     int next = e + 1, prev = e - 1;
     while (s.find(next) != s.end()) s.erase(next), next++;
-    while (s.find(prev) != s.end()) s.erase(next), prev++;
+    while (s.find(prev) != s.end()) s.erase(prev), prev--;
     res = max(res, next - prev - 1);
   }
   return res;
