@@ -42,11 +42,11 @@ int longestConsecutive(vector<int>& nums) {
   unordered_set<int> s(nums.begin(), nums.end());
   int res = 0;
   for (auto& e : nums) {
-    if (s.find(e - 1) != s.end())
-      continue;  // Check if it has previous elements
-    int cur = e;
-    while (s.find(cur + 1) != s.end()) cur++;
-    res = max(res, cur - e + 1);
+    if (s.find(e) == s.end()) continue;
+    int next = e + 1, prev = e - 1;
+    while (s.find(next) != s.end()) next++;
+    while (s.find(prev) != s.end()) prev++;
+    res = max(res, next - prev - 1);
   }
   return res;
 }
