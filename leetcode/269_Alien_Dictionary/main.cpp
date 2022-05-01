@@ -43,7 +43,7 @@ int V[26];
 void addEdge(vector<int> dictAdj[], int s, int d) { dictAdj[s].push_back(d); }
 
 int toAlpOrder(char c) { return c - 'a'; }
-char alpToChar(int c) { return (char)(c + 'a'); }
+char alpToChar(int c) { return c + 'a'; }
 
 bool dfs(vector<int> dictAdj[], int V[], stack<char>& s, int c) {
   V[c] = 1;  // Mark as visiting
