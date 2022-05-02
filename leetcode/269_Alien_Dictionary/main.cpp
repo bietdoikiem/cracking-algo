@@ -40,62 +40,48 @@ int dY[4] = {0, 1, 0, -1};
 
 int V[26];
 
-void addEdge(vector<int> dictAdj[], int s, int d) { dictAdj[s].push_back(d); }
+void addEdge(vector<int> adj[], int src, int dest) { adj[src].push_back(dest); }
+int charToOrder(char c) { return c - 'a'; }
+char orderToChar(int o) { return o + 'a'; }
 
-int toAlpOrder(char c) { return c - 'a'; }
-char alpToChar(int c) { return c + 'a'; }
-
-bool dfs(vector<int> dictAdj[], int V[], stack<char>& s, int c) {
-  V[c] = 1;  // Mark as visiting
-  for (int e : dictAdj[c]) {
-    // Visit unvisited node
-    if (V[e] == 0) {
-      if (!dfs(dictAdj, V, s, e)) return false;
-    }
-    if (V[e] == 1) return false;  // Cycle detected
+bool dfs(vector<int> adj[], stack<char>& s, int c) {
+  V[c] = 1;
+  for (int e : adj[c]) {
+    if (V[e] == 0 && !dfs(adj, s, e)) return false;
+    if (V[e] == 1) return false;
   }
-  V[c] = 2;              // Mark as visited
-  s.push(alpToChar(c));  // Push to topological order
+  V[c] = 2, s.push(orderToChar(c));
   return true;
 }
 
 string alienOrder(vector<string>& words) {
-  int n = (int)words.size();
-  memset(V, 1, sizeof(V));  // Reset color to -1
-  const int A = 26;
-  vector<int> dictAdj[A];
-  stack<char> s;
   string res;
-  // Init visited vertices
+  vector<int> adj[26];
+  stack<char> s;
+  memset(V, 1, sizeof(V));  // Set unused vertices to -1
+  // Init existing vertices
   for (auto& w : words) {
-    for (int i = 0; i < (int)w.size(); i++) {
-      V[w[i] - 'a'] = 0;
-    }
+    for (int i = 0; i < (int)w.size(); i++) V[charToOrder(w[i])] = 0;
   }
   // Build adjacency list
-  int prevSz = 0, curSz = 0;
-  for (int i = 0; i < n; i++) {
-    curSz = words[i].size();
-    if (i > 0) {
-      prevSz = words[i - 1].size();
-    }
+  int curSize = 0, prevSize = 0;
+  for (int i = 0; i < (int)words.size(); i++) {
+    curSize = (int)words[i].size();
+    if (i > 0) prevSize = (int)words[i - 1].size();
     bool isPrefix = true;
-    for (int j = 0; j < curSz; j++) {
-      if (i > 0 && j < prevSz && isPrefix && words[i][j] != words[i - 1][j]) {
-        addEdge(dictAdj, toAlpOrder(words[i - 1][j]), toAlpOrder(words[i][j]));
+    for (int j = 0; j < curSize; j++) {
+      if (i > 0 && j < prevSize && isPrefix && words[i - 1][j] != words[i][j]) {
+        addEdge(adj, charToOrder(words[i - 1][j]), charToOrder(words[i][j]));
         isPrefix = false;
       }
-      if (isPrefix && j == curSz - 1 && curSz < prevSz) return "";
+      if (isPrefix && j == curSize - 1 && curSize < prevSize) return "";
     }
   }
-  // Topological sorting
-  for (int i = 0; i < A; i++) {
-    if (V[i] == 0 && !dfs(dictAdj, V, s, i)) return "";
+  // Topological sort
+  for (int i = 0; i < 26; i++) {
+    if (V[i] == 0 && !dfs(adj, s, i)) return "";
   }
-  while (!s.empty()) {
-    res.push_back(s.top());
-    s.pop();
-  }
+  while (!s.empty()) res.push_back(s.top()), s.pop();
   return res;
 }
 
