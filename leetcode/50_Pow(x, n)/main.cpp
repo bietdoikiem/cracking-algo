@@ -41,7 +41,7 @@ int dY[4] = {0, 1, 0, -1};
 double helperPow(double x, int n) {
   if (n == 1) return x;
   double half = helperPow(x, n / 2);
-  return n % 2 == 0 ? half * half : half * half * helperPow(x, n % 2);
+  return n % 2 == 0 ? half * half : half * half * x;
 }
 
 double myPow(double x, int n) {
@@ -56,8 +56,20 @@ double myPow(double x, int n) {
 }
 
 double myPowIterative(double x, int n) {
-  // ...
-  return 0.0;
+  if (n == 0) return 1.0;
+  long long N = n;
+  if (n < 0) {
+    x = 1 / x;
+    N = -N;
+  }
+  double res = 1, curProd = x;
+  for (long long i = N; i > 0; i /= 2) {
+    if (i % 2 == 1) {
+      res *= curProd;
+    }
+    curProd = curProd * curProd;
+  }
+  return res;
 }
 
 int main() {
@@ -69,6 +81,8 @@ int main() {
   double x2 = 2.0;
   int n2 = -2;
   double res2 = myPow(x2, n2);
-  cout << "res2: " << setprecision(5) << res2 << endl;  // 0.25
+  cout << "res2: " << res2 << endl;  // 0.25
+  cout << "res1 (iterative): " << myPowIterative(x1, n1) << endl;
+  cout << "res2 (iterative): " << myPowIterative(x2, n2) << endl;
   return 0;
 }
