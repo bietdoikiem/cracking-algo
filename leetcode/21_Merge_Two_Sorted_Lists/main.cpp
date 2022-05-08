@@ -47,7 +47,7 @@ struct ListNode {
 };
 
 ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
-  ListNode *h = new ListNode(-1), *cur = h;
+  ListNode *h = new ListNode, *cur = h;
   if (list1 == nullptr || list2 == nullptr)
     return list1 == nullptr ? list2 : list1;
   while (list1 != nullptr && list2 != nullptr) {
