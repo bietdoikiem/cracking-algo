@@ -74,6 +74,17 @@ ListNode* removeNthFromEndTwoPasses(ListNode* head, int n) {
   return d->next;
 }
 
+// Solution using 1 pass & 2 pointers: O(n) time  - O(1) space
+ListNode* removeNthFromEndOnePass(ListNode* head, int n) {
+  ListNode* d = new ListNode(0);
+  d->next = head;
+  ListNode *fast = d, *slow = d;
+  for (int i = 0; i < n + 1; i++) fast = fast->next;
+  while (fast != nullptr) fast = fast->next, slow = slow->next;
+  slow->next = slow->next->next;
+  return d->next;
+}
+
 int main() {
   // TODO: Solve the problem!
   return 0;
