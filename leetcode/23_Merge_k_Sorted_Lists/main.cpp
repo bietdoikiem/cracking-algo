@@ -63,4 +63,33 @@ ListNode* mergeKLists(vector<ListNode*>& lists) {
   return h->next;
 }
 
+/* * Divide 'n' Conquer method * */
+
+// merge merges two linked list in ascending order
+ListNode* merge(ListNode* l1, ListNode* l2) {
+  if (l1 == nullptr) return l2;
+  if (l2 == nullptr) return l1;
+  if (l1->val < l2->val) {
+    l1->next = merge(l1->next, l2);
+    return l1;
+  }
+  l2->next = merge(l1, l2->next);
+  return l2;
+}
+
+// helper divides and merge two halved lists
+ListNode* mergeKListsHelper(vector<ListNode*>& lists, int l, int r) {
+  if (l < r) return nullptr;
+  if (l == r) return lists[l];
+  int m = l - (r - l) / 2;
+  ListNode *h1 = mergeKListsHelper(lists, l, m),
+           *h2 = mergeKListsHelper(lists, m + 1, r);
+  return merge(h1, h2);
+}
+
+// Divide and conquer method
+ListNode* mergeKListsDaC(vector<ListNode*>& lists) {
+  return mergeKListsHelper(lists, 0, (int)lists.size() - 1);
+}
+
 int main() { return 0; }
