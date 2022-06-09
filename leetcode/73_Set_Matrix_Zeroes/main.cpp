@@ -58,7 +58,7 @@ void setZeroes(vector<vector<int>>& matrix) {
 }
 
 // O(m*n) Time - O(1) Space
-void setZeroes(vector<vector<int>>& matrix) {
+void setZeroesSpaceOptimized(vector<vector<int>>& matrix) {
   const int R = (int)matrix.size(), C = (int)matrix[0].size();
   bool isCol = false;
   // Set Flags
