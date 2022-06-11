@@ -72,7 +72,4 @@ bool exist(vector<vector<char>>& board, string word) {
   return false;
 }
 
-int main() {
-  // TODO: Solve the problem!
-  return 0;
-}
+int main() { return 0; }
