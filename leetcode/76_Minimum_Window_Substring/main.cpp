@@ -38,7 +38,7 @@ int dY[4] = {0, 1, 0, -1};
 
 /***** SOLUTION BELOW HERE *****/
 
-int UPPER_BOUND = 100000;
+int UPPER_BOUND = 100001;
 
 // minWindow returns the minimum window contains all the t substring's letters
 string minWindow(string s, string t) {
