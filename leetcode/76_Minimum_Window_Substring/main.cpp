@@ -40,43 +40,39 @@ int dY[4] = {0, 1, 0, -1};
 
 int UPPER_BOUND = 100000;
 
-pair<int, int> minDist(pair<int, int> p1, pair<int, int> p2) {
-  int d1 = p1.second - p1.first, d2 = p2.second - p2.first;
-  return d1 < d2 ? p1 : p2;
-}
-
 // minWindow returns the minimum window contains all the t substring's letters
 string minWindow(string s, string t) {
   int m = (int)s.size(), n = (int)t.size(), l = 0, r = 0, charCount = 0;
-  pair<int, int> minW = {0, UPPER_BOUND};
-  unordered_map<char, int> letters;
-  // Build dict on t's letters
-  for (int i = 0; i < n; i++) {
-    if (letters.find(t[i]) == letters.end()) {
-      letters[t[i]] = 1;
-      continue;
-    }
-    letters[t[i]]++;
-  }
+  pair<pair<int, int>, int> mw = {{0, 0}, UPPER_BOUND};
+  unordered_map<char, int> map;
+  // Build dict
+  for (auto& c : t) map[c] = map.find(c) != map.end() ? map[c] + 1 : 1;
   // Sliding through s
   while (l <= r) {
+    // Shift right
     if (charCount < n && r < m) {
-      if (letters.find(s[r]) != letters.end()) {
-        if (letters[s[r]] > 0) charCount++;
-        letters[s[r]]--;
+      if (map.find(s[r]) != map.end()) {
+        if (map[s[r]] > 0) charCount++;
+        map[s[r]]--;
       }
       r++;
       continue;
     }
-    if (charCount == n) minW = minDist(minW, {l, r});
-    if (letters.find(s[l]) != letters.end()) {
-      if (letters[s[l]] >= 0) charCount--;
-      letters[s[l]]++;
+    // Find valid minimum window
+    if (charCount == n) {
+      int len = r - l + 1;
+      if (len < mw.second)
+        mw.first.first = l, mw.first.second = r, mw.second = len;
+    };
+    // Shift left
+    if (map.find(s[l]) != map.end()) {
+      if (map[s[l]] >= 0) charCount--;
+      map[s[l]]++;
     }
     l++;
   }
-  if (minW.second == UPPER_BOUND) return "";  // Invalid one
-  return s.substr(minW.first, (minW.second - 1) - minW.first + 1);
+  if (mw.second == UPPER_BOUND) return "";
+  return s.substr(mw.first.first, mw.second - 1);
 }
 
 int main() {
