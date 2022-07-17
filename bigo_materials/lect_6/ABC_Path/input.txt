@@ -1,0 +1,11 @@
+4 3
+ABE
+CFG
+BDH
+ABC
+4 3
+CBE
+XFG
+BYH
+CBC
+0 0
