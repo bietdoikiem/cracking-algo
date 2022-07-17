@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.module": "php",
+    "*.html": "html",
+    "*.env.*": "env",
+    "**.service.ts": "typescript",
+    "list": "cpp",
+    "vector": "cpp"
+  }
+}
