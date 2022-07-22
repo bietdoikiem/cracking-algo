@@ -68,7 +68,6 @@ void init() {
     for (int j = 0; j < W; j++) {
       cin >> place[i][j];
       if (place[i][j] == '@') s = {i, j};
-
       visited[i][j] = false;
     }
   }
