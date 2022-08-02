@@ -1,0 +1,11 @@
+{
+  "files.associations": {
+    "*.module": "php",
+    "*.html": "html",
+    "*.env.*": "env",
+    "**.service.ts": "typescript",
+    "__locale": "cpp",
+    "*.tcc": "cpp",
+    "regex": "cpp"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "files.associations": {
+    "*.module": "php",
+    "*.html": "html",
+    "*.env.*": "env",
+    "**.service.ts": "typescript",
+    "iostream": "cpp",
+    "__availability": "cpp",
+    "cstdarg": "cpp",
+    "cwchar": "cpp",
+    "*.tcc": "cpp",
+    "istream": "cpp",
+    "streambuf": "cpp",
+    "random": "cpp",
+    "__config": "cpp",
+    "filesystem": "cpp",
+    "fstream": "cpp",
+    "string": "cpp",
+    "cstdlib": "cpp"
+  }
+}
