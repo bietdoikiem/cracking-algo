@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/bietdoikiem/Code/cracking-algo/bigo_materials/lect_13/Search_Engine'
+make: Leaving directory `/Users/bietdoikiem/Code/cracking-algo/bigo_materials/lect_13/Search_Engine'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+
