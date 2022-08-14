@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.module": "php",
+    "*.html": "html",
+    "*.env.*": "env",
+    "**.service.ts": "typescript",
+    "filesystem": "cpp"
+  },
+  "C_Cpp.errorSquiggles": "Disabled"
+}
